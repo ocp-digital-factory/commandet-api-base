@@ -5,38 +5,17 @@
  */
 package ma.ocp.tp1.domain.rest.vo.exhange;
 
+import lombok.Data;
+
 /**
  *
  * @author YOUNES
  */
+@Data
 public class ProduitVo {
 
-    private Long id;
+    private String libelle;
     private String reference;
     private CategorieProduitVo categorieProduitVo;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
-
-    public CategorieProduitVo getCategorieProduitVo() {
-        return categorieProduitVo;
-    }
-
-    public void setCategorieProduitVo(CategorieProduitVo categorieProduitVo) {
-        this.categorieProduitVo = categorieProduitVo;
-    }
 
 }

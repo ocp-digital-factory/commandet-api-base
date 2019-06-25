@@ -11,6 +11,8 @@ import ma.ocp.tp1.domain.model.dao.CommandeDao;
 import ma.ocp.tp1.domain.model.service.CommandeItemService;
 import ma.ocp.tp1.domain.model.service.CommandeService;
 import ma.ocp.tp1.domain.model.service.config.CommandeDomainConfig;
+import ma.ocp.tp1.domain.rest.vo.exhange.ProduitVo;
+import ma.ocp.tp1.ext.consumed.feign.ProduitProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class CommandeServiceImpl implements CommandeService {
     @Autowired
     private CommandeItemService commandeItemService;
 
+    @Autowired
+    private ProduitProxy produitProxy;
 
     @Autowired
     private CommandeDomainConfig commandeDomainConfig;
@@ -40,15 +44,15 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Override
     public Commande saveCommandeWithCommandeItems(Commande commande) {
-       // if (validateCommande(commande.getCommandeItems())) {
+        if (validateCommande(commande.getCommandeItems())) {
             calculerTotal(commande, commande.getCommandeItems());
             commandeDao.save(commande);
             commandeItemService.saveCommandeItems(commande, commande.getCommandeItems());
             System.out.println("save commandeItems success");
             return commande;
-     //   } else {
-       //     return null;
-        //}
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -66,26 +70,27 @@ public class CommandeServiceImpl implements CommandeService {
         commande.setTotal(total);
     }
 
-    /* private boolean validateCommande(List<CommandeItem> commandeItems) {
+    private boolean validateCommande(List<CommandeItem> commandeItems) {
         return validateReferenceProduit(commandeItems);
     }
 
    private boolean validateReferenceProduit(List<CommandeItem> commandeItems) {
-        if (commandeItems == null || commandeItems.isEmpty()) {
-            return false;
-        } else if (commandeItems.size() > commandeDomainConfig.getNombreLimitProduit()) {
-            return false;
-        } else {
-            int cmp = 0;
-            for (CommandeItem commandeItem : commandeItems) {
-                if (produitProxy.findByReference(commandeItem.getReferenceProduit()) != null) {
-                    cmp++;
-                }
-            }
-            System.out.println("ha cmp ==> "+cmp+" o ha size ==> "+commandeItems.size());
-            return (cmp == commandeItems.size());
-       //     return true;
-        }
-    }*/
+       if (commandeItems == null || commandeItems.isEmpty()) {
+           return false;
+       } else if (commandeItems.size() > commandeDomainConfig.getNombreLimitProduit()) {
+           return false;
+       } else {
+           int cmp = 0;
+           for (CommandeItem commandeItem : commandeItems) {
+               ProduitVo byReference = produitProxy.findByReference(commandeItem.getReferenceProduit());
+               if (byReference != null && byReference.getReference() != null) {
+                   System.out.println(byReference.getReference());
+                   cmp++;
+               }
+           }
+           System.out.println("ha cmp ==> " + cmp + " o ha size ==> " + commandeItems.size());
+           return (cmp == commandeItems.size());
+       }
+   }
 
 }
