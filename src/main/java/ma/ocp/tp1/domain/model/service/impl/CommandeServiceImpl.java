@@ -82,7 +82,8 @@ public class CommandeServiceImpl implements CommandeService {
         }else {
             int cmp = 0;
             for (CommandeItem commandeItem : commandeItems) {
-                if (produitProxy.findByReference(commandeItem.getReferenceProduit()) != null) {
+                ProduitVo produit = produitProxy.findByReference(commandeItem.getReferenceProduit());
+                if (produit.getReference() != null) {
                     cmp++;
                 }
             }
