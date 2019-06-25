@@ -5,22 +5,25 @@
  */
 package ma.ocp.tp1.domain.rest.vo.exhange;
 
+import java.io.Serializable;
+
 /**
  *
  * @author YOUNES
  */
-public class ProduitVo {
+public class ProduitVo implements Serializable {
 
-    private Long id;
+    private static final long serialVersionUID = 1L;
+    private String libelle;
     private String reference;
     private CategorieProduitVo categorieProduitVo;
 
-    public Long getId() {
-        return id;
+    public String getLibelle() {
+        return libelle;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
     }
 
     public String getReference() {
@@ -38,5 +41,5 @@ public class ProduitVo {
     public void setCategorieProduitVo(CategorieProduitVo categorieProduitVo) {
         this.categorieProduitVo = categorieProduitVo;
     }
-
 }
+

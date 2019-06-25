@@ -6,6 +6,9 @@
 package ma.ocp.tp1.domain.model.service;
 
 import ma.ocp.tp1.domain.bean.Commande;
+import ma.ocp.tp1.domain.rest.vo.exhange.ProduitVo;
+import ma.ocp.tp1.ext.ProduitProxy;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -18,6 +21,6 @@ public interface CommandeService {
     public Commande saveCommandeWithCommandeItems(Commande commande);
 
     public Commande findByReference(String reference);
+    public ProduitVo findProductByReference(String reference);
     public List<Commande> findAll();
-
 }

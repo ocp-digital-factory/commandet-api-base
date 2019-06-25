@@ -10,7 +10,8 @@ import ma.ocp.tp1.domain.bean.CommandeItem;
 import ma.ocp.tp1.domain.model.dao.CommandeDao;
 import ma.ocp.tp1.domain.model.service.CommandeItemService;
 import ma.ocp.tp1.domain.model.service.CommandeService;
-import ma.ocp.tp1.domain.model.service.config.CommandeDomainConfig;
+import ma.ocp.tp1.domain.rest.vo.exhange.ProduitVo;
+import ma.ocp.tp1.ext.ProduitProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class CommandeServiceImpl implements CommandeService {
     private CommandeItemService commandeItemService;
 
 
-    @Autowired
-    private CommandeDomainConfig commandeDomainConfig;
+   @Autowired
+    private ProduitProxy produitProxy;
 
     @Override
     public List<Commande> findAll() {
@@ -40,20 +41,25 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Override
     public Commande saveCommandeWithCommandeItems(Commande commande) {
-       // if (validateCommande(commande.getCommandeItems())) {
+       if (validateCommande(commande.getCommandeItems())) {
             calculerTotal(commande, commande.getCommandeItems());
             commandeDao.save(commande);
             commandeItemService.saveCommandeItems(commande, commande.getCommandeItems());
             System.out.println("save commandeItems success");
             return commande;
-     //   } else {
-       //     return null;
-        //}
+       } else {
+           return null;
+       }
     }
 
     @Override
     public Commande findByReference(String reference) {
         return commandeDao.findByReference(reference);
+    }
+
+    @Override
+    public ProduitVo findProductByReference(String reference) {
+        return produitProxy.findByReference(reference);
     }
 
     private void calculerTotal(Commande commande, List<CommandeItem> commandeItems) {
@@ -66,16 +72,14 @@ public class CommandeServiceImpl implements CommandeService {
         commande.setTotal(total);
     }
 
-    /* private boolean validateCommande(List<CommandeItem> commandeItems) {
+    private boolean validateCommande(List<CommandeItem> commandeItems) {
         return validateReferenceProduit(commandeItems);
     }
 
    private boolean validateReferenceProduit(List<CommandeItem> commandeItems) {
         if (commandeItems == null || commandeItems.isEmpty()) {
             return false;
-        } else if (commandeItems.size() > commandeDomainConfig.getNombreLimitProduit()) {
-            return false;
-        } else {
+        }else {
             int cmp = 0;
             for (CommandeItem commandeItem : commandeItems) {
                 if (produitProxy.findByReference(commandeItem.getReferenceProduit()) != null) {
@@ -86,6 +90,6 @@ public class CommandeServiceImpl implements CommandeService {
             return (cmp == commandeItems.size());
        //     return true;
         }
-    }*/
+    }
 
 }

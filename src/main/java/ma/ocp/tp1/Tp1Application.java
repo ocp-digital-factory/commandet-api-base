@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableFeignClients("ma.ocp.tp1.ext")
 public class Tp1Application {
 
     public static void main(String[] args) {
