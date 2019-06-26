@@ -60,6 +60,10 @@ public class CommandeServiceImpl implements CommandeService {
         return commandeDao.findByReference(reference);
     }
 
+    public ProduitVo findProduitByReference(String reference) {
+        return produitProxy.findByReference(reference);
+    }
+
     private void calculerTotal(Commande commande, List<CommandeItem> commandeItems) {
         BigDecimal total = BigDecimal.ZERO;
         if (commandeItems != null && !commandeItems.isEmpty()) {
@@ -80,6 +84,7 @@ public class CommandeServiceImpl implements CommandeService {
        } else if (commandeItems.size() > commandeDomainConfig.getNombreLimitProduit()) {
            return false;
        } else {
+
            int cmp = 0;
            for (CommandeItem commandeItem : commandeItems) {
                ProduitVo byReference = produitProxy.findByReference(commandeItem.getReferenceProduit());

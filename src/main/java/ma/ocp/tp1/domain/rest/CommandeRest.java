@@ -13,7 +13,9 @@ import ma.ocp.tp1.domain.rest.converter.CommandeConverter;
 import ma.ocp.tp1.domain.rest.converter.CommandeItemConverter;
 import ma.ocp.tp1.domain.rest.vo.CommandeItemVo;
 import ma.ocp.tp1.domain.rest.vo.CommandeVo;
+import ma.ocp.tp1.domain.rest.vo.exhange.ProduitVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,6 +64,16 @@ public class CommandeRest {
         return commandeConverter.toVo(commande);
     }
 
+    @GetMapping("/produit/{reference}")
+    public ResponseEntity findProduitByReference(@PathVariable("reference") String reference) {
+        ProduitVo produitByReference = commandeService.findProduitByReference(reference);
+
+        if(produitByReference.getReference() != null) {
+            return ResponseEntity.ok(produitByReference);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 
 
 }

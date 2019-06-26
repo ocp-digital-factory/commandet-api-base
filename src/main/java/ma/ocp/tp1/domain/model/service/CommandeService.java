@@ -6,6 +6,7 @@
 package ma.ocp.tp1.domain.model.service;
 
 import ma.ocp.tp1.domain.bean.Commande;
+import ma.ocp.tp1.domain.rest.vo.exhange.ProduitVo;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public interface CommandeService {
     public Commande saveCommandeWithCommandeItems(Commande commande);
 
     public Commande findByReference(String reference);
+
+    public ProduitVo findProduitByReference(String reference);
     public List<Commande> findAll();
 
 }
